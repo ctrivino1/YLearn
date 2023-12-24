@@ -22,6 +22,16 @@ from .utils import (
 )
 from ylearn.utils import logging
 
+global_x_model = None
+global_y_model = None
+global_yx_model = None
+global_v_data = None
+global_wv_data = None
+global_x_target = None
+global_y_target = None
+global_w_data = None
+
+
 logger = logging.get_logger(__name__)
 
 #
@@ -373,8 +383,15 @@ class DoubleML(BaseEstModel):
             covariate=covariate,
             **kwargs,
         )
-
+        global global_x_model , global_y_model ,global_yx_model, global_v_data, global_wv_data, global_x_target,global_y_target, global_v_data,global_w_data
         y, x, w, v = convert2array(data, outcome, treatment, adjustment, covariate)
+        global_y_target = y
+        global_x_target = x
+        global_v_data = v
+        global_w_data = w
+        
+        
+        
         self._v = v
         self._y_d = y.shape[1]
         cfold = self.cf_fold
@@ -398,6 +415,7 @@ class DoubleML(BaseEstModel):
 
         self._x_d = x.shape[1]
         wv = get_wv(w, v)
+        global_wv_data = wv
 
         # step 1: split the data
         if cfold > 1:
