@@ -31,6 +31,12 @@ global_x_target = None
 global_y_target = None
 global_w_data = None
 
+global_data = None
+global_y_before = None
+global_x_before = None
+global_cov_before = None
+global_adjustment_before = None
+
 
 logger = logging.get_logger(__name__)
 
@@ -384,6 +390,11 @@ class DoubleML(BaseEstModel):
             **kwargs,
         )
         global global_x_model , global_y_model ,global_yx_model, global_v_data, global_wv_data, global_x_target,global_y_target, global_v_data,global_w_data
+        global_data = data
+        global_y_before = outcome
+        global_x_before = treatment
+        global_cov_before = covariate
+        global_adjustment_before = adjustment
         y, x, w, v = convert2array(data, outcome, treatment, adjustment, covariate)
         global_y_target = y
         global_x_target = x
