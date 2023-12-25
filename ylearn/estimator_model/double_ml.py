@@ -25,11 +25,11 @@ from ylearn.utils import logging
 global_x_model = None
 global_y_model = None
 global_yx_model = None
-global_v_data = None
+global_v_convert2array = None
 global_wv_data = None
-global_x_target = None
-global_y_target = None
-global_w_data = None
+global_x_convert2array = None
+global_y_convert2array = None
+global_w_convert2array = None
 
 global_data = None
 global_y_before = None
@@ -389,17 +389,17 @@ class DoubleML(BaseEstModel):
             covariate=covariate,
             **kwargs,
         )
-        global global_x_model , global_y_model ,global_yx_model, global_v_data, global_wv_data, global_x_target,global_y_target, global_v_data,global_w_data
+        global global_x_model, global_y_model, global_yx_model, global_v_convert2array, global_wv_data, global_x_convert2array, global_y_convert2array, global_w_convert2array, global_data, global_y_before, global_x_before, global_cov_before, global_adjustment_before
         global_data = data
         global_y_before = outcome
         global_x_before = treatment
         global_cov_before = covariate
         global_adjustment_before = adjustment
         y, x, w, v = convert2array(data, outcome, treatment, adjustment, covariate)
-        global_y_target = y
-        global_x_target = x
-        global_v_data = v
-        global_w_data = w
+        global_v_convert2array = v
+        global_x_convert2array = x
+        global_y_convert2array = y
+        global_w_convert2array = w
         
         
         
