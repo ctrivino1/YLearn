@@ -708,7 +708,6 @@ class DoubleML(BaseEstModel):
         target = kwargs.pop("target")
         print("target: ", target)
         fitted_result = defaultdict(list)
-        print("fitted_result: ", fitted_result)
 
         if not is_ymodel and self.is_discrete_treatment:
             # convert back to a vector with each dimension being a value
