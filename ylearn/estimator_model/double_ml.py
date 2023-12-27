@@ -42,6 +42,9 @@ fit_1st_stage_x = None
 fit_1st_stage_x_model = None
 fit_1st_stage_wv = None
 fit_1st_stage_folds = None
+
+# cross fit global 
+cross_fit_fitted_result = None
 logger = logging.get_logger(__name__)
 
 #
@@ -703,6 +706,7 @@ class DoubleML(BaseEstModel):
             return None
 
     def _cross_fit(self, model, *args, **kwargs):
+        global cross_fit_fitted_result
         print("cross_fit function")
         folds = kwargs.pop("folds")
         is_ymodel = kwargs.pop("is_ymodel")
@@ -746,10 +750,12 @@ class DoubleML(BaseEstModel):
             
 
         fitted_result["is_fitted"] = [True]
+        cross_fit_fitted_result = fitted_result
 
         return fitted_result
 
     def _fit_1st_stage(self, x_model, y_model, y, x, wv, folds=None, **kwargs):
+        global fit_1st_stage_x,fit_1st_stage_x_model,fit_1st_stage_wv, fit_1st_stage_folds
         """Fit the models in the first stage.
 
         Parameters
@@ -788,15 +794,16 @@ class DoubleML(BaseEstModel):
             x_folds, y_folds = folds
         else:
             x_folds, y_folds = None, None
-        
-        logger.info(f"_fit_1st_stage: fitting x_model {type(x_model).__name__}")
-        x_hat_dict = self._cross_fit(
-            x_model, wv, target=x, folds=x_folds, is_ymodel=False, **kwargs
-        )
+            
         fit_1st_stage_x = x
         fit_1st_stage_x_model = x_model
         fit_1st_stage_wv = wv
         fit_1st_stage_folds = x_folds
+        logger.info(f"_fit_1st_stage: fitting x_model {type(x_model).__name__}")
+        x_hat_dict = self._cross_fit(
+            x_model, wv, target=x, folds=x_folds, is_ymodel=False, **kwargs
+        )
+        
 
         logger.info(f"_fit_1st_stage: fitting y_model {type(y_model).__name__}")
         y_hat_dict = self._cross_fit(
