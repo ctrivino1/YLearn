@@ -706,12 +706,13 @@ class DoubleML(BaseEstModel):
             return None
 
     def _cross_fit(self, model, *args, **kwargs):
-        global cross_fit_fitted_result
+        global cross_fit_fitted_result,cross_fit_target,cross_fit_target_converted, cross_fit_pred_func
         print("cross_fit function")
         folds = kwargs.pop("folds")
+        print("folds :", folds)
         is_ymodel = kwargs.pop("is_ymodel")
         target = kwargs.pop("target")
-        print("target: ", target)
+        cross_fit_target = target
         fitted_result = defaultdict(list)
 
         if not is_ymodel and self.is_discrete_treatment:
@@ -721,7 +722,9 @@ class DoubleML(BaseEstModel):
             pred_func = self.x_pred_func
         else:
             target_converted = target
+            cross_fit_target_converted = target_converted
             pred_func = self.y_pred_func
+            cross_fit_pred_func = pred_func
 
         if folds is None:
             wv = args[0]
@@ -734,6 +737,7 @@ class DoubleML(BaseEstModel):
             idx = np.arange(start=0, stop=wv.shape[0])
             fitted_result["train_test_id"].append((idx, idx))
         else:
+            print("fitted_result[paras].append(np.ones_like(target) * np.nan)")
             fitted_result["paras"].append(np.ones_like(target) * np.nan)
 
             for i, (train_id, test_id) in enumerate(folds):
