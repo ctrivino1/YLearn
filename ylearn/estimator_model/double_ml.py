@@ -37,7 +37,10 @@ global_x_before = None
 global_cov_before = None
 global_adjustment_before = None
 
-
+# _fit_1st_stage global
+_fit_1st_stage_x = None
+_fit_1st_stage_x_model = None
+_fit_1st_stage_wv = None
 logger = logging.get_logger(__name__)
 
 #
@@ -781,7 +784,9 @@ class DoubleML(BaseEstModel):
             x_folds, y_folds = folds
         else:
             x_folds, y_folds = None, None
-
+        _fit_1st_stage_x = x
+        _fit_1st_stage_x_model = x_model
+        _fit_1st_stage_wv = wv
         logger.info(f"_fit_1st_stage: fitting x_model {type(x_model).__name__}")
         x_hat_dict = self._cross_fit(
             x_model, wv, target=x, folds=x_folds, is_ymodel=False, **kwargs
