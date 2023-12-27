@@ -737,7 +737,7 @@ class DoubleML(BaseEstModel):
                 model_ = clone(model)
                 print("model: ",model_)
                 temp_wv = args[0][train_id]
-                print('temp_wv: ",temp_wv)
+                print("temp_wv: ",temp_wv)
                 temp_wv_test = args[0][test_id]
                 print("temp_wv_test: ", temp_wv_test)
                 
