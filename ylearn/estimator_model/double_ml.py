@@ -702,10 +702,13 @@ class DoubleML(BaseEstModel):
             return None
 
     def _cross_fit(self, model, *args, **kwargs):
+        print("cross_fit function")
         folds = kwargs.pop("folds")
         is_ymodel = kwargs.pop("is_ymodel")
         target = kwargs.pop("target")
+        print("target: ", target)
         fitted_result = defaultdict(list)
+        print("fitted_result: ", fitted_result)
 
         if not is_ymodel and self.is_discrete_treatment:
             # convert back to a vector with each dimension being a value
@@ -730,18 +733,30 @@ class DoubleML(BaseEstModel):
             fitted_result["paras"].append(np.ones_like(target) * np.nan)
 
             for i, (train_id, test_id) in enumerate(folds):
+                print("i: ",i)
                 model_ = clone(model)
+                print("model: ",model_)
                 temp_wv = args[0][train_id]
+                print('temp_wv: ",temp_wv)
                 temp_wv_test = args[0][test_id]
+                print("temp_wv_test: ", temp_wv_test)
+                
                 target_train = target_converted[train_id]
+                print("target_train: ", target_train)
                 model_.fit(temp_wv, target_train, **kwargs)
                 target_predict = model_.__getattribute__(pred_func)(temp_wv_test)
+                print("target_predict: ", target_predict)
 
                 fitted_result["models"].append(model_)
+                print("fitted_result[models]: ",fitted_result["models"])
                 fitted_result["paras"][0][test_id] = target_predict
+                print("fitted_result[paras][0][test_id]: ",fitted_result)
                 fitted_result["train_test_id"].append((train_id, test_id))
+            
 
         fitted_result["is_fitted"] = [True]
+        print("fitted_result")
+        print(fitted_result)
 
         return fitted_result
 
