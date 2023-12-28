@@ -711,6 +711,7 @@ class DoubleML(BaseEstModel):
         print("cross_fit function")
         folds = kwargs.pop("folds")
         print("folds :", folds)
+        cross_fit_enumerate = folds
         is_ymodel = kwargs.pop("is_ymodel")
         target = kwargs.pop("target")
         cross_fit_target = target
@@ -728,6 +729,7 @@ class DoubleML(BaseEstModel):
             cross_fit_pred_func = pred_func
 
         if folds is None:
+            print("folds is none")
             wv = args[0]
             model.fit(wv, target_converted, **kwargs)
 
