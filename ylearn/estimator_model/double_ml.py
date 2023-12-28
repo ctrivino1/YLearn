@@ -767,7 +767,7 @@ class DoubleML(BaseEstModel):
         return fitted_result
 
     
-        def _cross_fit_x(self, model, *args, **kwargs):
+    def _cross_fit_x(self, model, *args, **kwargs):
         global cross_fit_fitted_result,cross_fit_target,cross_fit_target_converted, cross_fit_pred_func, args0, cross_fit_enumerate,global_temp_wv,global_target_train
         print("cross_fit function")
         folds = kwargs.pop("folds")
