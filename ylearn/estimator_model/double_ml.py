@@ -46,6 +46,8 @@ fit_1st_stage_folds = None
 # cross fit global 
 cross_fit_fitted_result = None
 cross_fit_enumerate = None
+global_temp_wv = None
+global_target_train = None
 logger = logging.get_logger(__name__)
 args0 = None
 #
@@ -707,7 +709,7 @@ class DoubleML(BaseEstModel):
             return None
 
     def _cross_fit(self, model, *args, **kwargs):
-        global cross_fit_fitted_result,cross_fit_target,cross_fit_target_converted, cross_fit_pred_func, args0, cross_fit_enumerate
+        global cross_fit_fitted_result,cross_fit_target,cross_fit_target_converted, cross_fit_pred_func, args0, cross_fit_enumerate,global_temp_wv,global_target_train
         print("cross_fit function")
         folds = kwargs.pop("folds")
         print("folds :", folds)
@@ -747,8 +749,10 @@ class DoubleML(BaseEstModel):
             for i, (train_id, test_id) in enumerate(folds):
                 model_ = clone(model)
                 temp_wv = args[0][train_id]
+                global_temp_wv = temp_wv
                 temp_wv_test = args[0][test_id]
                 target_train = target_converted[train_id]
+                global_target_train = target_train
                 model_.fit(temp_wv, target_train, **kwargs)
                 target_predict = model_.__getattribute__(pred_func)(temp_wv_test)
 
