@@ -50,6 +50,7 @@ global_temp_wv = None
 global_target_train = None
 
 #cross fit_x
+cross_fit_x_fitted_result = None
 cross_fit_x_target = None
 cross_fit_x_enumerate = None
 x_args0 = None
@@ -775,7 +776,7 @@ class DoubleML(BaseEstModel):
 
     
     def _cross_fit_x(self, model, *args, **kwargs):
-        global cross_fit_x_target,cross_fit_x_enumerate,x_args0,cross_fit_x_temp_wv,cross_fit_x_target_train
+        global cross_fit_x_target,cross_fit_x_enumerate,x_args0,cross_fit_x_temp_wv,cross_fit_x_target_train,cross_fit_x_fitted_result
         print("cross_fit_x function")
         folds = kwargs.pop("folds")
         print("folds :", folds)
@@ -831,7 +832,7 @@ class DoubleML(BaseEstModel):
             
 
         fitted_result["is_fitted"] = [True]
-        cross_fit_fitted_result = fitted_result
+        cross_fit_x_fitted_result = fitted_result
 
         return fitted_result
         
