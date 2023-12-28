@@ -775,7 +775,7 @@ class DoubleML(BaseEstModel):
 
     
     def _cross_fit_x(self, model, *args, **kwargs):
-        global cross_fit_x_target,cross_fit_x_enumerate,x_args0,cross_fit_x_temp_wv,cross_fit_x_target_train
+        global cross_fit_x_target,cross_fit_x_enumerate,x_args0,cross_fit_x_temp_wv,cross_fit_x_target_train,
         print("cross_fit function")
         folds = kwargs.pop("folds")
         print("folds :", folds)
@@ -816,8 +816,10 @@ class DoubleML(BaseEstModel):
                 model_ = clone(model)
                 temp_wv = args[0][train_id]
                 cross_fit_x_temp_wv = temp_wv
+                print('x_temp_wv: ', temp_wv)
                 temp_wv_test = args[0][test_id]
                 target_train = target_converted[train_id]
+                print('x_target_train: ', target_train)
                 cross_fit_x_target_train = target_train
                 model_.fit(temp_wv, target_train, **kwargs)
                 target_predict = model_.__getattribute__(pred_func)(temp_wv_test)
