@@ -766,6 +766,65 @@ class DoubleML(BaseEstModel):
 
         return fitted_result
 
+    
+        def _cross_fit_x(self, model, *args, **kwargs):
+        global cross_fit_fitted_result,cross_fit_target,cross_fit_target_converted, cross_fit_pred_func, args0, cross_fit_enumerate,global_temp_wv,global_target_train
+        print("cross_fit function")
+        folds = kwargs.pop("folds")
+        print("folds :", folds)
+        cross_fit_x_enumerate = folds
+        is_ymodel = kwargs.pop("is_ymodel")
+        target = kwargs.pop("target")
+        cross_fit_x_target = target
+        fitted_result = defaultdict(list)
+
+        if not is_ymodel and self.is_discrete_treatment:
+            # convert back to a vector with each dimension being a value
+            # indicating the corresponding discrete value
+            target_converted = convert4onehot(target)
+            pred_func = self.x_pred_func
+        else:
+            target_converted = target
+            cross_fit_target_converted = target_converted
+            pred_func = self.y_pred_func
+            cross_fit_pred_func = pred_func
+
+        if folds is None:
+            print("folds is none")
+            wv = args[0]
+            model.fit(wv, target_converted, **kwargs)
+
+            p_hat = model.__getattribute__(pred_func)(wv)
+
+            fitted_result["models"].append(model)
+            fitted_result["paras"].append(p_hat)
+            idx = np.arange(start=0, stop=wv.shape[0])
+            fitted_result["train_test_id"].append((idx, idx))
+        else:
+            print("fitted_result[paras].append(np.ones_like(target) * np.nan)")
+            fitted_result["paras"].append(np.ones_like(target) * np.nan)
+            x_args0 = args[0]
+            cross_fit_enumerate = folds
+            for i, (train_id, test_id) in enumerate(folds):
+                model_ = clone(model)
+                temp_wv = args[0][train_id]
+                cross_fit_x_temp_wv = temp_wv
+                temp_wv_test = args[0][test_id]
+                target_train = target_converted[train_id]
+                cross_fit_x_target_train = target_train
+                model_.fit(temp_wv, target_train, **kwargs)
+                target_predict = model_.__getattribute__(pred_func)(temp_wv_test)
+
+                fitted_result["models"].append(model_)
+                fitted_result["paras"][0][test_id] = target_predict
+                fitted_result["train_test_id"].append((train_id, test_id))
+            
+
+        fitted_result["is_fitted"] = [True]
+        cross_fit_fitted_result = fitted_result
+
+        return fitted_result
+        
     def _fit_1st_stage(self, x_model, y_model, y, x, wv, folds=None, **kwargs):
         global fit_1st_stage_x,fit_1st_stage_x_model,fit_1st_stage_wv, fit_1st_stage_folds
         """Fit the models in the first stage.
@@ -813,6 +872,10 @@ class DoubleML(BaseEstModel):
         fit_1st_stage_folds = x_folds
         logger.info(f"_fit_1st_stage: fitting x_model {type(x_model).__name__}")
         x_hat_dict = self._cross_fit(
+            x_model, wv, target=x, folds=x_folds, is_ymodel=False, **kwargs
+        )
+
+        x_hat_dict_x = self._cross_fit_x(
             x_model, wv, target=x, folds=x_folds, is_ymodel=False, **kwargs
         )
         
