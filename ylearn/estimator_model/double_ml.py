@@ -741,7 +741,7 @@ class DoubleML(BaseEstModel):
             print("fitted_result[paras].append(np.ones_like(target) * np.nan)")
             fitted_result["paras"].append(np.ones_like(target) * np.nan)
             args0 = args[0]
-            cross_fit_enumerate = list(enumerate(folds))
+            cross_fit_enumerate = folds
             for i, (train_id, test_id) in enumerate(folds):
                 model_ = clone(model)
                 temp_wv = args[0][train_id]
