@@ -782,12 +782,12 @@ class DoubleML(BaseEstModel):
 
     
     def _cross_fit_y(self, model, *args, **kwargs):
-        global cross_fit_fitted_result,cross_fit_target,cross_fit_target_converted, cross_fit_pred_func, args0, cross_fit_enumerate,global_temp_wv,global_target_train
+        global cross_fit_y_fitted_result,cross_fit_y_target,cross_fit_y_target_converted, cross_fit_y_pred_func, y_args0, cross_fit_y_enumerate,y_global_temp_wv,y_global_target_train
         folds = kwargs.pop("folds")
         cross_fit_enumerate = folds
         is_ymodel = kwargs.pop("is_ymodel")
         target = kwargs.pop("target")
-        cross_fit_target = target
+        cross_fit_y_target = target
         fitted_result = defaultdict(list)
         I = 0 
 
@@ -799,9 +799,9 @@ class DoubleML(BaseEstModel):
         else:
             print("first else")
             target_converted = target
-            cross_fit_target_converted = target_converted
+            cross_fit_y_target_converted = target_converted
             pred_func = self.y_pred_func
-            cross_fit_pred_func = pred_func
+            cross_fit_y_pred_func = pred_func
 
         if folds is None:
             print("folds is none")
@@ -818,19 +818,18 @@ class DoubleML(BaseEstModel):
             print("fitted_result[paras].append(np.ones_like(target) * np.nan)")
             
             fitted_result["paras"].append(np.ones_like(target) * np.nan)
-            args0 = args[0]
-            cross_fit_enumerate = folds
+            y_args0 = args[0]
+            cross_fit_y_enumerate = folds
             for i, (train_id, test_id) in enumerate(folds):
                 print("i :", i + 1)
                 model_ = clone(model)
                 temp_wv = args[0][train_id]
-                global_temp_wv = temp_wv
+                y_global_temp_wv = temp_wv
                 temp_wv_test = args[0][test_id]
                 target_train = target_converted[train_id]
-                global_target_train = target_train
+                y_global_target_train = target_train
                 model_.fit(temp_wv, target_train, **kwargs)
                 current_target = target[i]
-                print(f"Predicting target: {current_target}")
                 
                 target_predict = model_.__getattribute__(pred_func)(temp_wv_test)
                 #print("target_predict", target_predict
