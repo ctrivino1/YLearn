@@ -718,9 +718,8 @@ class DoubleML(BaseEstModel):
 
     def _cross_fit(self, model, *args, **kwargs):
         global cross_fit_fitted_result,cross_fit_target,cross_fit_target_converted, cross_fit_pred_func, args0, cross_fit_enumerate,global_temp_wv,global_target_train
-        print("cross_fit function")
+        i = 0 
         folds = kwargs.pop("folds")
-        print("folds :", folds)
         cross_fit_enumerate = folds
         is_ymodel = kwargs.pop("is_ymodel")
         target = kwargs.pop("target")
@@ -733,6 +732,7 @@ class DoubleML(BaseEstModel):
             target_converted = convert4onehot(target)
             pred_func = self.x_pred_func
         else:
+            print("first else")
             target_converted = target
             cross_fit_target_converted = target_converted
             pred_func = self.y_pred_func
@@ -751,6 +751,7 @@ class DoubleML(BaseEstModel):
             fitted_result["train_test_id"].append((idx, idx))
         else:
             print("fitted_result[paras].append(np.ones_like(target) * np.nan)")
+            print("i :", i + 1)
             fitted_result["paras"].append(np.ones_like(target) * np.nan)
             args0 = args[0]
             cross_fit_enumerate = folds
@@ -762,6 +763,9 @@ class DoubleML(BaseEstModel):
                 target_train = target_converted[train_id]
                 global_target_train = target_train
                 model_.fit(temp_wv, target_train, **kwargs)
+                current_target = target[i]
+                print(f"Predicting target: {current_target}")
+                
                 target_predict = model_.__getattribute__(pred_func)(temp_wv_test)
 
                 fitted_result["models"].append(model_)
