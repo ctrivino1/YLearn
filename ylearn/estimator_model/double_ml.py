@@ -768,7 +768,7 @@ class DoubleML(BaseEstModel):
                 print(f"Predicting target: {current_target}")
                 
                 target_predict = model_.__getattribute__(pred_func)(temp_wv_test)
-                #print("target_predict", target_predict
+                print("target_predict", target_predict)
 
                 fitted_result["models"].append(model_)
                 fitted_result["paras"][0][test_id] = target_predict
