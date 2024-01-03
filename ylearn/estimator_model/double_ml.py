@@ -407,7 +407,7 @@ class DoubleML(BaseEstModel):
             covariate=covariate,
             **kwargs,
         )
-        global global_x_model, global_y_model, global_yx_model, global_v_convert2array, global_wv_data, global_x_convert2array, global_y_convert2array, global_w_convert2array, global_data, global_y_before, global_x_before, global_cov_before, global_adjustment_before
+        global global_x_model, global_y_model, global_yx_model, global_v_convert2array, global_wv_data, global_x_convert2array, global_y_convert2array, global_w_convert2array, global_data, global_y_before, global_x_before, global_cov_before, global_adjustment_before,global_y_prime,global_x_prime
         global_data = data
         global_y_before = outcome
         global_x_before = treatment
@@ -469,7 +469,8 @@ class DoubleML(BaseEstModel):
         # step 3: calculate the differences
         y_prime = y - y_hat
         x_prime = self._cal_x_prime(x, x_hat, v)
-
+        global_y_prime = y_prime
+        global_x_prime = x_prime
         # step 4: fit the regression problem
         self._fit_2nd_stage(self.yx_model, x_prime, y_prime, v, **kwargs)
 
