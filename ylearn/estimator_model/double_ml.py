@@ -457,6 +457,10 @@ class DoubleML(BaseEstModel):
         self.x_hat_dict, self.y_hat_dict = self._fit_1st_stage(
             self.x_model, self.y_model, y, x, wv, folds=folds
         )
+        global_x_hat_dict = self.x_hat_dict
+        global_y_hat_dict = self.x_hat_dict
+        print("x.shape: ", x.shape)
+        print("y.shape: ",y.shape)
         x_hat = self.x_hat_dict["paras"][0].reshape((x.shape))
         if self.proba_output:
             assert y.shape[1] == 1, "Currently only support one discrete outcome."
@@ -929,6 +933,7 @@ class DoubleML(BaseEstModel):
         yx_model.fit(x_prime, y_prime)
 
     def _cal_x_prime(self, x, x_hat, v):
+        print("cal_x_prime V: ", v)
         x_diff = x - x_hat
         v = np.hstack([np.ones((v.shape[0], 1)), v])
         return nd_kron(x_diff, v)
