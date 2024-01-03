@@ -725,7 +725,7 @@ class DoubleML(BaseEstModel):
         cross_fit_target = target
         fitted_result = defaultdict(list)
         I = 0 
-
+        
         if not is_ymodel and self.is_discrete_treatment:
             # convert back to a vector with each dimension being a value
             # indicating the corresponding discrete value
@@ -829,11 +829,11 @@ class DoubleML(BaseEstModel):
                 target_train = target_converted[train_id]
                 y_global_target_train = target_train
                 model_.fit(temp_wv, target_train, **kwargs)
+                print("Printing **kwargs:", kwargs)
                 current_target = target[i]
-                
+                print(f"Predicting target: {current_target}")
                 target_predict = model_.__getattribute__(pred_func)(temp_wv_test)
-                #print("target_predict", target_predict
-
+                print("target_predict", target_predict)
                 fitted_result["models"].append(model_)
                 fitted_result["paras"][0][test_id] = target_predict
                 fitted_result["train_test_id"].append((train_id, test_id))
