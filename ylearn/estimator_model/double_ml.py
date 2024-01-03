@@ -782,7 +782,7 @@ class DoubleML(BaseEstModel):
 
     
     def _cross_fit_y(self, model, *args, **kwargs):
-        global cross_fit_y_fitted_result,cross_fit_y_target,cross_fit_y_target_converted, cross_fit_y_pred_func, y_args0, cross_fit_y_enumerate,y_global_temp_wv,y_global_target_train
+        global cross_fit_y_fitted_result,cross_fit_y_target,cross_fit_y_target_converted, cross_fit_y_pred_func, y_args0, cross_fit_y_enumerate,y_global_temp_wv,y_global_target_train,y_global_temp_wv_test
         folds = kwargs.pop("folds")
         cross_fit_enumerate = folds
         is_ymodel = kwargs.pop("is_ymodel")
@@ -826,6 +826,7 @@ class DoubleML(BaseEstModel):
                 temp_wv = args[0][train_id]
                 y_global_temp_wv = temp_wv
                 temp_wv_test = args[0][test_id]
+                y_global_temp_wv_test = temp_wv_test
                 target_train = target_converted[train_id]
                 y_global_target_train = target_train
                 model_.fit(temp_wv, target_train, **kwargs)
@@ -840,7 +841,7 @@ class DoubleML(BaseEstModel):
             
 
         fitted_result["is_fitted"] = [True]
-        cross_fit_fitted_result = fitted_result
+        cross_fit_y_fitted_result = fitted_result
 
         return fitted_result
         
