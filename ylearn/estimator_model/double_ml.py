@@ -458,7 +458,7 @@ class DoubleML(BaseEstModel):
             self.x_model, self.y_model, y, x, wv, folds=folds
         )
         global_x_hat_dict = self.x_hat_dict
-        global_y_hat_dict = self.x_hat_dict
+        global_y_hat_dict = self.y_hat_dict
         print("x.shape: ", x.shape)
         print("y.shape: ",y.shape)
         x_hat = self.x_hat_dict["paras"][0].reshape((x.shape))
