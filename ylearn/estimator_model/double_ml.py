@@ -479,7 +479,7 @@ class DoubleML(BaseEstModel):
         self._fit_2nd_stage(self.yx_model, x_prime, y_prime, v, **kwargs)
 
         self._is_fitted = True
-
+        global_self = self
         return self
 
     def estimate(
