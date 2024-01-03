@@ -407,7 +407,7 @@ class DoubleML(BaseEstModel):
             covariate=covariate,
             **kwargs,
         )
-        global global_x_model, global_y_model, global_yx_model, global_v_convert2array, global_wv_data, global_x_convert2array, global_y_convert2array, global_w_convert2array, global_data, global_y_before, global_x_before, global_cov_before, global_adjustment_before,global_y_prime,global_x_prime,global_y_hat_dict,global_x_hat_dict
+        global global_self,global_x_model, global_y_model, global_yx_model, global_v_convert2array, global_wv_data, global_x_convert2array, global_y_convert2array, global_w_convert2array, global_data, global_y_before, global_x_before, global_cov_before, global_adjustment_before,global_y_prime,global_x_prime,global_y_hat_dict,global_x_hat_dict
         global_data = data
         global_y_before = outcome
         global_x_before = treatment
